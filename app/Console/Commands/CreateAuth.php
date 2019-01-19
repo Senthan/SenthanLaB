@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Role;
 use App\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class CreateAuth extends Command
 {
