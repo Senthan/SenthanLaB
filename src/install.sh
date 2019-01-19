@@ -92,5 +92,6 @@ php artisan create:auth ${userName} ${userPassword} ${userEmail}
 
 sleep 1
 
-echo "127.0.0.1       ${appName}.senthanlab.lh" >> "/etc/hosts"
+#echo "127.0.0.1       ${appName}.senthanlab.lh" >> "/etc/hosts"
+echo "127.0.0.1       ${appName}.karaitivu.net" >> "/etc/hosts"
 exit
