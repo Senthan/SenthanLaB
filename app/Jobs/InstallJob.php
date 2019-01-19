@@ -51,7 +51,7 @@ class InstallJob
 
             $installPath = env('INSTALL_PATH', '/var/www/html/');
 
-            $userPassword = DB::table('users')->where('id', $user->id)->first()->password;
+            $userPassword = $user->password;
             // dd('sh ' . $src_path . '/install.sh ' . $installPath . ' ' . $disk . ' ' . $dbFile . ' ' . $dbName . ' ' . $dbPass . ' ' . $appName . ' ' . $userName . ' ' . $userEmail . ' ' . "'" . $userPassword . "'");
             $restore = new Process('sh ' . $src_path . '/install.sh ' . $installPath . ' ' . $disk . ' ' . $dbFile . ' ' . $dbName . ' ' . $dbPass . ' ' . $appName . ' ' . $userName . ' ' . $userEmail . ' ' . "'" . $userPassword . "'");
             $restore->setTimeout(3600);

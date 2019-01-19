@@ -51,8 +51,8 @@ cat > .env << END_TEXT
 
 APP_ENV=production
 APP_DEBUG=false
-APP_KEY=base64:y3wjRkKAJ5ahMs7KTRiOBlGK2/fS3aCF028Bkb+He3s=
-APP_URL=https://${dbName}.senthan.lh
+APP_KEY=
+APP_URL=${dbName}
 
 PRODUCT_NAME='Senthan'
 
@@ -85,6 +85,8 @@ sudo chmod -R 777 bootstrap/cache/
 sleep 1
 php artisan key:generate --force
 sleep 1
+php artisan migrate:refresh --force
+sleep
 
 php artisan create:auth ${userName} ${userPassword} ${userEmail}
 

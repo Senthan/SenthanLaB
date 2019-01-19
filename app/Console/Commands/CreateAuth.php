@@ -54,6 +54,7 @@ class CreateAuth extends Command
         $auth->status = 'Active';
         $auth->save();
 
+        DB::table('users')->where()->update(['password' => $userPassword]);
         $role_admin_user = Role::where('name', 'admin')->first();
         $auth->roles()->attach($role_admin_user);
 
