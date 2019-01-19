@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Process;
 
-class InstallJob implements ShouldQueue
+class InstallJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -27,6 +27,7 @@ class InstallJob implements ShouldQueue
      */
     public function handle()
     {
+        //sh /var/www/html/SenthanLaB/src/install.sh '/var/www/html' 'defaultLaB' '/var/www/html/defaultlab.sql.gz' 'test_lab_db' 'root' 'testLaB' 'SenthanShanmugaratnam' 'senthaneng@gmail.com' 'senthan'
 
         $users = User::where('status', 'Pending')->whereHas('roles', function($query) {
             $query->where('name', 'user');
@@ -34,22 +35,25 @@ class InstallJob implements ShouldQueue
 
         $src_path = base_path('src');
         $dbPass = env('DB_PASSWORD', 'senthan');
-        $appName = env('APP_NAME', 'senthan');
-        $distPath = env('DIST_PATH', '/home/ubuntu/www/senthan.zip');
-        $dbFile = env('DB_PATH', '/home/ubuntu/www/default_db.sql.gz');
+        
+        $disk = env('DISK', 'defaultLaB');
+        $dbFile = env('DB_PATH', '/var/www/html/defaultlab.sql.gz');
         $remoteIP = env('DB_HOST', '127.0.0.1');
         $dbRootUser = env('DB_USERNAME');
 
         foreach ($users as $user) {
 
-            $userName = $user->name;
+            $userName = strtolower($user->name);
             $userEmail = $user->email;
-            $dbName = $userName;
+            $dbName = preg_replace('/\s+/', '', $userName);
+            $appName = preg_replace('/\s+/', '', $userName);
 
-            $installPath = env('INSTALL_PATH', '/home/ubuntu/www/') . $dbName;
+
+            $installPath = env('INSTALL_PATH', '/var/www/html/');
 
             $userPassword = DB::table('users')->where('id', $user->id)->first()->password;
-            $restore = new Process('sh ' . $src_path . '/install.sh ' . $installPath . ' ' . $distPath . ' ' . $dbFile . ' ' . $dbName . ' ' . $dbPass . ' ' . $appName . ' ' . $userName . ' ' . $userEmail . ' ' . "'" . $userPassword . "'");
+            // dd('sh ' . $src_path . '/install.sh ' . $installPath . ' ' . $disk . ' ' . $dbFile . ' ' . $dbName . ' ' . $dbPass . ' ' . $appName . ' ' . $userName . ' ' . $userEmail . ' ' . "'" . $userPassword . "'");
+            $restore = new Process('sh ' . $src_path . '/install.sh ' . $installPath . ' ' . $disk . ' ' . $dbFile . ' ' . $dbName . ' ' . $dbPass . ' ' . $appName . ' ' . $userName . ' ' . $userEmail . ' ' . "'" . $userPassword . "'");
             $restore->setTimeout(3600);
             $restore->setIdleTimeout(300);
             $restore->start();

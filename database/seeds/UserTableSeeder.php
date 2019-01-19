@@ -15,17 +15,17 @@ class UserTableSeeder extends Seeder
         $role_admin_user = Role::where('name', 'admin')->first();
 
         $regular_user = new User();
-        $regular_user->name = 'Samuel Jackson';
-        $regular_user->email = 'samueljackson@jackson.com';
-        $regular_user->password = Hash::make('samuel1234');
+        $regular_user->name = 'Senthan Shanmugaratnam';
+        $regular_user->email = 'senthaneng@gmail.com';
+        $regular_user->password = Hash::make('senthan');
         $regular_user->save();
-        $regular_user->roles()->attach($role_regular_user);
+        $regular_user->roles()->attach($role_admin_user);
 
         $admin_user = new User();
-        $admin_user->name = 'Neo Ighodaro';
-        $admin_user->email = 'neo@creativitykills.co';
-        $admin_user->password = Hash::make('neo1234');
+        $admin_user->name = 'Senthan';
+        $admin_user->email = 'senthanboss@gmail.com';
+        $admin_user->password = Hash::make('senthan');
         $admin_user->save();
-        $admin_user->roles()->attach($role_admin_user);
+        $admin_user->roles()->attach($role_regular_user);
     }
 }

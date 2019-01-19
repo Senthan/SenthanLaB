@@ -44,13 +44,13 @@ class CreateAuth extends Command
         $userEmail = $this->argument('userEmail');
         $this->info("connected");
 
-        $auth = User::firstOrNew(['userName' => $userName]);
-        if(isset($auth)) {
+        $auth = User::firstOrNew(['name' => $userName]);
+        if(isset($auth) && isset($auth->id)) {
             $this->info("User ".$userName ." already there");
             return;
         }
-        $auth->userPassword = $userPassword;
-        $auth->userEmail = $userEmail;
+        $auth->password = $userPassword;
+        $auth->email = $userEmail;
         $auth->save();
 
         $role_admin_user = Role::where('name', 'admin')->first();

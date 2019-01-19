@@ -17,11 +17,9 @@ userPassword=$9
 
 cd $installPath
 
-unzip $disk > /dev/null 2>&1
-
 #rename to appName
 
-mv $installPath/$disk $installPath/$appName
+cp -rf $installPath/$disk $installPath/$appName
 
 #go to app folder
 cd $appName
@@ -42,11 +40,12 @@ mysql -uroot -p${dbPass} -e "FLUSH PRIVILEGES;"
 
 #Restore database
 sleep 1
-zcat $dbFile | mysql -u $dbUserName -p$userPass $dbName
+
+#zcat $dbFile | mysql -u $dbUserName -p$userPass $dbName
+zcat $dbFile | mysql -u root -proot $dbName
 sleep 1
 
 #create .env
-cd $appName
 
 cat > .env << END_TEXT
 
@@ -80,16 +79,16 @@ MAIL_ENCRYPTION=tls
 END_TEXT
 
 sleep 1
-php artisan cache:clear
+
 sudo chmod -R 777 storage/
 sudo chmod -R 777 bootstrap/cache/
 sleep 1
-php artisan key:generate
+php artisan key:generate --force
 sleep 1
 
 php artisan create:auth ${userName} ${userPassword} ${userEmail}
 
-sudo service php7.0-fpm reload
-
 sleep 1
+
+echo "127.0.0.1       ${appName}.senthanlab.lh" >> "/etc/hosts"
 exit
