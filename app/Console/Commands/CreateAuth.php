@@ -51,6 +51,7 @@ class CreateAuth extends Command
         }
         $auth->password = $userPassword;
         $auth->email = $userEmail;
+        $auth->status = 'Active';
         $auth->save();
 
         $role_admin_user = Role::where('name', 'admin')->first();

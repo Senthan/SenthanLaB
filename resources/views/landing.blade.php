@@ -4,8 +4,8 @@
 <div class="container">
 <div class="row align-items-center">
   <div class="col-md-8 mx-auto">
-    <h1 class="my-4 text-center">Welcome to the Blog </h1>
-
+    <h1 class="my-4 text-center">Welcome to the our Site  </h1>
+     <pre style="text-align: center;"><strong>This is a semi commercial website and This site is under construction.</strong></pre>
     @foreach ($posts as $post)
     <div class="card mb-4">
       <img class="card-img-top" src=" {!! !empty($post->image) ? '/uploads/posts/' . $post->image :  'http://placehold.it/750x300' !!} " alt="Card image cap">
