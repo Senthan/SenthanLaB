@@ -38,7 +38,6 @@ echo "Granting ALL privileges on ${dbName} to ${username}!"
 mysql -uroot -p${dbPass} -e "GRANT ALL PRIVILEGES ON ${dbName}.* TO '${dbUserName}'@'localhost';"
 mysql -uroot -p${dbPass} -e "FLUSH PRIVILEGES;"
 
-#Restore database
 sleep 1
 
 #zcat $dbFile | mysql -u $dbUserName -p$userPass $dbName
@@ -51,7 +50,7 @@ cat > .env << END_TEXT
 
 APP_ENV=production
 APP_DEBUG=false
-APP_KEY=
+APP_KEY=base64:zctgrKrF2hQSPDikvIOSDto0P7kiVX/VDZ0D3eE3kbA=
 APP_URL=${dbName}
 
 PRODUCT_NAME='Senthan'
@@ -84,11 +83,19 @@ sudo chmod -R 777 storage/
 sudo chmod -R 777 bootstrap/cache/
 sleep 1
 php artisan key:generate --force
-sleep 1
-php artisan migrate:refresh --force
-sleep
 
-php artisan create:auth ${userName} ${userPassword} ${userEmail}
+sleep 1
+
+mysql -uroot -p${dbPass} ${dbName} << EOF
+insert into users (name,email,password,status) values('${userName}', '${userEmail}', '${userPassword}', 'Active');
+EOF
+
+mysql -uroot -p${dbPass} ${dbName} << EOF
+insert into role_user (role_id,user_id) values('2', '1');
+EOF
+
+
+#php artisan create:auth ${userName} ${userPassword} ${userEmail}
 
 sleep 1
 
